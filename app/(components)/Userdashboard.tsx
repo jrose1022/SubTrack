@@ -10,8 +10,7 @@ export default function Dashboard() {
 
   const navLinks = [
     { href: '/home', icon: Home, label: 'Dashboard' },
-    { href: '/household', icon: House, label: 'Household' },
-    { href: '/parking', icon: Car, label: 'Parking' },
+    
   ];
 
   const bottomLinks = [
