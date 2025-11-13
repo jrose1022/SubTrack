@@ -16,7 +16,7 @@ export default function Login() {
     setMessage('');
 
     try {
-      // 1️⃣ Sign in with Supabase Auth
+      // 1️⃣ Sign in with Supabase
       const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -27,12 +27,12 @@ export default function Login() {
         return;
       }
 
-      // 2️⃣ Fetch user profile using email
+      // 2️⃣ Fetch profile (must include is_admin)
       const { data: profileData, error: profileError } = await supabase
         .from('users')
-        .select('name, address, phone, email')
+        .select('name, address, phone, email, is_admin')
         .eq('email', email)
-        .maybeSingle(); // returns null if no row
+        .maybeSingle();
 
       if (profileError) {
         setMessage('Failed to fetch profile: ' + profileError.message);
@@ -44,11 +44,15 @@ export default function Login() {
         return;
       }
 
-      // Optional: store profile info for later use
+      // 3️⃣ Store profile in localStorage
       localStorage.setItem('userProfile', JSON.stringify(profileData));
 
-      // 3️⃣ Redirect to /home
-      router.push('/home');
+      // 4️⃣ Redirect based on role
+      if (profileData.is_admin === true) {
+        router.push('/AdminHomepage');
+      } else {
+        router.push('/home');
+      }
     } catch (err: any) {
       setMessage('Unexpected error: ' + err.message);
     }
@@ -75,7 +79,10 @@ export default function Login() {
             width={80}
             height={80}
           />
-          <h1 className="font-bold text-black m-0" style={{ fontFamily: "'Inknut Antiqua', serif" }}>
+          <h1
+            className="font-bold text-black m-0"
+            style={{ fontFamily: "'Inknut Antiqua', serif" }}
+          >
             SubTrack
           </h1>
         </div>
