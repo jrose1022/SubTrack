@@ -2,6 +2,7 @@
 
 import AdminDashboard from "../(components)/Admindashboard";
 import AdminUserManagement from "../(components)/AdminUserManagement";
+
 import React from "react";
 
 export default function AdminHomePage() {
@@ -9,7 +10,7 @@ export default function AdminHomePage() {
     <div
       className="flex h-screen w-screen bg-cover bg-center bg-no-repeat"
       style={{
-        backgroundImage: "url('/BackgroundAuth.jpg')",
+        backgroundImage: "url('/dashboardBackground.jpg')",
         backdropFilter: 'blur(5px)',
       }}
     >
