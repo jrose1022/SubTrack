@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, House, Car, Settings, LogOut, Menu, X } from 'lucide-react';
+import { Home,MessageCircleQuestion, Settings, LogOut, Menu, X } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -10,7 +10,7 @@ export default function Dashboard() {
 
   const navLinks = [
     { href: '/home', icon: Home, label: 'Dashboard' },
-    
+    { href: '/faqs', icon: MessageCircleQuestion, label: 'Faqs' },
   ];
 
   const bottomLinks = [

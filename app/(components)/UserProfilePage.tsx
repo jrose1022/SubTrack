@@ -104,7 +104,7 @@ export default function UserProfilePage() {
   if (!profile) return <p className="text-center mt-8 text-black">No profile found.</p>;
 
   return (
-    <div className="flex flex-col items-center sm:p-8 min-h-screen w-full space-y-8 text-black bg-gray-50">
+    <div className="flex flex-col items-center sm:p-8 min-h-screen w-full space-y-8 text-black ">
       {/* PROFILE CARD */}
       <div className="w-full max-w-3xl bg-white rounded-xl shadow-2xl p-6 border border-gray-300">
         <div className="flex flex-col sm:flex-row items-center sm:items-start space-x-0 sm:space-x-4">
