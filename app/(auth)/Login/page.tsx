@@ -110,7 +110,7 @@ export default function Login() {
 
           {/* Password */}
           <div className="flex items-center bg-white rounded-full px-3 py-2 shadow">
-            <span className="mr-2 text-gray-400">🔒</span>
+            <span className="mr-2 text-gray-400">@</span>
             <input
               type="password"
               placeholder="Password"
