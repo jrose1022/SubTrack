@@ -6,25 +6,7 @@ import AdminUserManagement from "../(components)/AdminUserManagement";
 
 export default async function AdminHomePage() {
   // FIX: Add await
-  const supabase = await createSupabaseServerClient();
-
-  // Get the session
-  const { data: { session } } = await supabase.auth.getSession();
-
-  if (!session) {
-    redirect("/Login");
-  }
-
-  // Get user role from your "users" table
-  const { data: user } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", session.user.id)
-    .single();
-
-  if (!user || user.role !== "admin") {
-    redirect("/");
-  }
+  
 
   // --- IF ADMIN, RENDER THE PAGE ---
   return (

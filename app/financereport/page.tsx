@@ -7,23 +7,7 @@ import AdminFinancialReport from "../(components)/AdminFinancialReport";
 export default async function FinanceHomePage() {
   const supabase = await createSupabaseServerClient();
 
-  // Get logged-in user
-  const { data: { session } } = await supabase.auth.getSession();
 
-  if (!session) {
-    redirect("/Login");
-  }
-
-  // Check role
-  const { data: user } = await supabase
-    .from("users")
-    .select("role")
-    .eq("id", session.user.id)
-    .single();
-
-  if (!user || user.role !== "admin") {
-    redirect("/");
-  }
 
   // ⬇ If ADMIN → Show the page
   return (

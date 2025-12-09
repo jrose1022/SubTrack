@@ -16,23 +16,26 @@ export default function Login() {
     setMessage('');
 
     try {
-      // 1️⃣ Sign in with Supabase
-      const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
+      // 1️⃣ Login
+      const { data: authData, error: authError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
       if (authError || !authData.user) {
         setMessage('Login failed: ' + (authError?.message || 'Unknown error'));
         return;
       }
 
-      // 2️⃣ Fetch profile (must include is_admin)
+      const user = authData.user;
+
+      // 2️⃣ Fetch profile using auth_id
       const { data: profileData, error: profileError } = await supabase
         .from('users')
-        .select('name, address, phone, email, is_admin')
-        .eq('email', email)
-        .maybeSingle();
+        .select('name, address, phone, email, is_admin, auth_id')
+        .eq('auth_id', user.id)
+        .single();
 
       if (profileError) {
         setMessage('Failed to fetch profile: ' + profileError.message);
@@ -40,14 +43,14 @@ export default function Login() {
       }
 
       if (!profileData) {
-        setMessage('No profile found for this email.');
+        setMessage('No profile found for this user.');
         return;
       }
 
-      // 3️⃣ Store profile in localStorage
+      // 3️⃣ Store in localStorage (used by AdminProfilePage)
       localStorage.setItem('userProfile', JSON.stringify(profileData));
 
-      // 4️⃣ Redirect based on role
+      // 4️⃣ Redirect
       if (profileData.is_admin === true) {
         router.push('/AdminHomepage');
       } else {
@@ -110,7 +113,7 @@ export default function Login() {
 
           {/* Password */}
           <div className="flex items-center bg-white rounded-full px-3 py-2 shadow">
-            <span className="mr-2 text-gray-400">@</span>
+            <span className="mr-2 text-gray-400">*</span>
             <input
               type="password"
               placeholder="Password"
@@ -130,7 +133,7 @@ export default function Login() {
             </Link>
           </div>
 
-           <div className="flex justify-end">
+          <div className="flex justify-end">
             <Link
               href="/ForgotPassword"
               className="italic text-sm text-gray-700 hover:underline"
