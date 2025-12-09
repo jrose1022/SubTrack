@@ -13,7 +13,7 @@ export default function AdminDashboard() {
     const profile = localStorage.getItem('userProfile');
     if (profile) {
       const user = JSON.parse(profile);
-      // ✅ Checks if user.is_admin is true
+      // ✅ Checks if the user is an admin
       setIsAdmin(!!user.is_admin);
     }
   }, []);

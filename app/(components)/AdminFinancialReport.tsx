@@ -197,13 +197,13 @@ const handlePaymentSubmit = async (e: React.FormEvent) => {
           onClick={() => setShowForm(true)}
           className="px-6 py-2 bg-indigo-600 text-white rounded-lg shadow-md hover:bg-indigo-700 transition"
         >
-          ➕ Add New Balance Transaction
+          Add New Balance Transaction
         </button>
         <button
           onClick={() => setShowUserModal(true)}
           className="ml-4 px-6 py-2 bg-green-600 text-white rounded-lg shadow-md hover:bg-green-700 transition"
         >
-          💵 Manage User Payments
+          Manage User Payments
         </button>
       </div>
 

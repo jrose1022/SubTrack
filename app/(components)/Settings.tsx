@@ -19,7 +19,7 @@ export default function SettingsPage() {
 
   const [authUser, setAuthUser] = useState<any>(null);
 
-  // Fetch the logged-in user + profile
+  // Fetch the logged-in user and profile
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);

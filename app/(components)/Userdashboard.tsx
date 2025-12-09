@@ -10,7 +10,7 @@ export default function Dashboard() {
 
   const navLinks = [
     { href: '/home', icon: Home, label: 'Dashboard' },
-    { href: '/faqs', icon: MessageCircleQuestion, label: 'Faqs' },
+    { href: '/faq', icon: MessageCircleQuestion, label: 'Faqs' },
   ];
 
   const bottomLinks = [
