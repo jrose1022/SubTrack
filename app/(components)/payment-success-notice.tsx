@@ -1,14 +1,12 @@
-import { CheckCircle2, Home, Receipt } from "lucide-react";
+import { CheckCircle2, Download, Home, Receipt } from "lucide-react";
 import Link from "next/link";
 
-type PaymentSuccessPageProps = {
-  searchParams: Promise<{
-    amount?: string;
-    method?: string;
-    receipt?: string;
-    assessments?: string;
-    date?: string;
-  }>;
+type PaymentSuccessNoticeProps = {
+  amount?: string;
+  method?: string;
+  receipt?: string;
+  assessments?: string;
+  date?: string;
 };
 
 const peso = new Intl.NumberFormat("en-PH", {
@@ -16,26 +14,32 @@ const peso = new Intl.NumberFormat("en-PH", {
   currency: "PHP",
 });
 
-export default async function PaymentSuccessPage({
-  searchParams,
-}: PaymentSuccessPageProps) {
-  const params = await searchParams;
-  const amountValue = Number(params.amount);
+export default function PaymentSuccessNotice({
+  amount: amountParam,
+  method: methodParam,
+  receipt: receiptParam,
+  assessments: assessmentsParam,
+  date: dateParam,
+}: PaymentSuccessNoticeProps) {
+  const amountValue = Number(amountParam);
   const amount = Number.isFinite(amountValue) && amountValue >= 0 ? amountValue : 120;
   const receipt =
-    params.receipt && /^ST-\d{8}$/.test(params.receipt) ? params.receipt : "ST-DEMO";
+    receiptParam && /^ST-\d{8}$/.test(receiptParam) ? receiptParam : "ST-DEMO";
   const method = ["QR payment", "Credit or debit card", "Online banking"].includes(
-    params.method ?? "",
+    methodParam ?? "",
   )
-    ? params.method
+    ? methodParam
     : "QR payment";
   const assessments =
-    params.assessments?.split(", ").filter(Boolean).join(", ") ||
+    assessmentsParam?.split(", ").filter(Boolean).join(", ") ||
     "October HOA dues, October parking · P-01";
-  const parsedDate = params.date ? new Date(params.date) : new Date();
+  const parsedDate = dateParam ? new Date(dateParam) : new Date();
   const transactionDate = Number.isNaN(parsedDate.getTime())
     ? new Date().toISOString()
     : parsedDate.toISOString();
+  const parkingWasPaid = assessments
+    .toLowerCase()
+    .includes("parking");
   const receiptQuery = new URLSearchParams({
     amount: amount.toFixed(2),
     method: String(method),
@@ -92,6 +96,14 @@ export default async function PaymentSuccessPage({
               <dd className="max-w-[65%] text-right font-medium">{assessments}</dd>
             </div>
             <div className="flex justify-between gap-3">
+              <dt className="text-neutral-500">Verified slot status</dt>
+              <dd className="text-right font-semibold text-emerald-700">
+                {parkingWasPaid
+                  ? "P-01 renewed · Simulation"
+                  : "P-01 unchanged"}
+              </dd>
+            </div>
+            <div className="flex justify-between gap-3">
               <dt className="text-neutral-500">Status</dt>
               <dd className="font-semibold text-emerald-700">Completed · Simulation</dd>
             </div>
@@ -101,14 +113,14 @@ export default async function PaymentSuccessPage({
         <div className="mt-7 grid gap-2 sm:grid-cols-2">
           <Link
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 py-3 text-xs font-semibold text-neutral-950 transition hover:bg-amber-400"
-            href={`/digital-receipt?${receiptQuery.toString()}`}
+            href={`/?view=receipt&${receiptQuery.toString()}`}
           >
-            <Receipt size={15} />
-            View digital receipt
+            <Download size={15} />
+            View / download receipt
           </Link>
           <Link
             className="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-200 px-5 py-3 text-xs font-semibold text-neutral-700 transition hover:bg-neutral-50"
-            href="/payment-checkout"
+            href="/"
           >
             <Home size={15} />
             Return to payments

@@ -13,7 +13,7 @@ const dateTime = new Intl.DateTimeFormat("en-PH", {
   timeStyle: "short",
 });
 
-type ReceiptViewProps = {
+type DigitalReceiptCardProps = {
   amount?: string;
   assessments?: string;
   date?: string;
@@ -26,7 +26,7 @@ type ReceiptViewProps = {
 
 const paymentMethods = ["QR payment", "Credit or debit card", "Online banking"];
 
-export default function ReceiptView({
+export default function DigitalReceiptCard({
   amount: amountParam,
   assessments: assessmentsParam,
   date: dateParam,
@@ -35,7 +35,7 @@ export default function ReceiptView({
   method: methodParam,
   receipt: receiptParam,
   status: statusParam,
-}: ReceiptViewProps) {
+}: DigitalReceiptCardProps) {
   const amountValue = Number(amountParam);
   const amount =
     Number.isFinite(amountValue) && amountValue >= 0 ? amountValue : null;
@@ -80,7 +80,7 @@ export default function ReceiptView({
           </p>
           <Link
             className="mt-6 inline-flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2.5 text-xs font-semibold text-neutral-950 transition hover:bg-amber-400"
-            href="/payment-checkout"
+            href="/"
           >
             <ArrowLeft size={14} />
             Return to checkout
@@ -96,7 +96,7 @@ export default function ReceiptView({
         <div className="print-hidden mb-6 flex flex-wrap items-center justify-between gap-3">
           <Link
             className="inline-flex items-center gap-2 text-xs font-medium text-neutral-600 transition hover:text-neutral-950"
-            href="/payment-checkout"
+            href="/"
           >
             <ArrowLeft size={14} />
             Back to checkout

@@ -138,7 +138,7 @@ function DemoQrCode() {
   );
 }
 
-export default function PaymentCheckoutPage() {
+export default function PaymentCheckoutCard() {
   const router = useRouter();
   const [selectedIds, setSelectedIds] = useState(
     assessments.map((assessment) => assessment.id),
@@ -181,14 +181,14 @@ export default function PaymentCheckoutPage() {
     });
 
     window.setTimeout(() => {
-      router.push(`/payment-success?${query.toString()}`);
+      router.push(`/?${query.toString()}`);
     }, 700);
   }
 
   return (
     <div className="min-h-screen bg-[#f7f7f6] text-[#292927]">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-60 flex-col bg-[#292a29] px-4 py-6 text-white lg:flex">
-        <Link className="mb-10 flex items-center gap-3 px-1" href="/payment-checkout">
+        <Link className="mb-10 flex items-center gap-3 px-1" href="/">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-500 text-[#252525]">
             <Building2 size={22} />
           </span>
@@ -206,7 +206,7 @@ export default function PaymentCheckoutPage() {
         <nav aria-label="Homeowner portal" className="space-y-1">
           <Link
             className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm text-neutral-400 transition hover:bg-white/5 hover:text-white"
-            href="/payment-checkout"
+            href="/"
           >
             <WalletCards size={17} />
             Overview
@@ -214,7 +214,7 @@ export default function PaymentCheckoutPage() {
           <Link
             aria-current="page"
             className="flex items-center gap-3 rounded-lg border-l-2 border-amber-500 bg-white/5 px-3 py-3 text-sm text-white"
-            href="/payment-checkout"
+            href="/"
           >
             <CreditCard size={17} className="text-amber-500" />
             Payments
