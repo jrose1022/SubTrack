@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 
 const links = [
-  { href: "/homeowner", label: "Overview", icon: LayoutGrid },
+  { href: "/homeowner/overview", label: "Overview", icon: LayoutGrid },
   {
     href: "/homeowner/statement-of-account",
     label: "Statement of account",
