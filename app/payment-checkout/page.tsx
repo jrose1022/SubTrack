@@ -171,11 +171,13 @@ export default function PaymentCheckoutPage() {
 
     setIsSubmitting(true);
     const receipt = `ST-${Date.now().toString().slice(-8)}`;
+    const transactionDate = new Date().toISOString();
     const query = new URLSearchParams({
       amount: total.toFixed(2),
       method: paymentMethods.find((method) => method.id === paymentMethod)?.label ?? "QR payment",
       receipt,
       assessments: selectedAssessments.map((assessment) => assessment.name).join(", "),
+      date: transactionDate,
     });
 
     window.setTimeout(() => {

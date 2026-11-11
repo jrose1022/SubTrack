@@ -1,4 +1,5 @@
 import { CheckCircle2, Home, Receipt } from "lucide-react";
+import Link from "next/link";
 
 type PaymentSuccessPageProps = {
   searchParams: Promise<{
@@ -6,6 +7,7 @@ type PaymentSuccessPageProps = {
     method?: string;
     receipt?: string;
     assessments?: string;
+    date?: string;
   }>;
 };
 
@@ -30,6 +32,20 @@ export default async function PaymentSuccessPage({
   const assessments =
     params.assessments?.split(", ").filter(Boolean).join(", ") ||
     "October HOA dues, October parking · P-01";
+  const parsedDate = params.date ? new Date(params.date) : new Date();
+  const transactionDate = Number.isNaN(parsedDate.getTime())
+    ? new Date().toISOString()
+    : parsedDate.toISOString();
+  const receiptQuery = new URLSearchParams({
+    amount: amount.toFixed(2),
+    method: String(method),
+    receipt,
+    assessments,
+    date: transactionDate,
+    homeowner: "Maya Bennett",
+    household: "A-101",
+    status: "Completed · Simulation",
+  });
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#f7f7f6] px-5 py-10 text-[#292927]">
@@ -82,13 +98,22 @@ export default async function PaymentSuccessPage({
           </dl>
         </div>
 
-        <a
-          className="mt-7 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 py-3 text-xs font-semibold text-neutral-950 transition hover:bg-amber-400"
-          href="/payment-checkout"
-        >
-          <Home size={15} />
-          Return to payments
-        </a>
+        <div className="mt-7 grid gap-2 sm:grid-cols-2">
+          <Link
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 py-3 text-xs font-semibold text-neutral-950 transition hover:bg-amber-400"
+            href={`/digital-receipt?${receiptQuery.toString()}`}
+          >
+            <Receipt size={15} />
+            View digital receipt
+          </Link>
+          <Link
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-neutral-200 px-5 py-3 text-xs font-semibold text-neutral-700 transition hover:bg-neutral-50"
+            href="/payment-checkout"
+          >
+            <Home size={15} />
+            Return to payments
+          </Link>
+        </div>
         <p className="mt-4 text-[10px] text-neutral-500">
           SineGANG HOA · Household A-101
         </p>
