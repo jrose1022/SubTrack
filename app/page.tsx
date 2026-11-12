@@ -1,6 +1,7 @@
 import DigitalReceiptCard from "./(components)/digital-receipt-card";
 import PaymentSuccessNotice from "./(components)/payment-success-notice";
 import PaymentCheckoutCard from "./(components)/payment-checkout-card";
+import LoginPage from "./(auth)/Login/page";
 
 type DashboardPageProps = {
   searchParams: Promise<{
@@ -46,5 +47,9 @@ export default async function Page({ searchParams }: DashboardPageProps) {
     );
   }
 
-  return <PaymentCheckoutCard />;
+  if (params.view === "checkout") {
+    return <PaymentCheckoutCard />;
+  }
+
+  return <LoginPage />;
 }
