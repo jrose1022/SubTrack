@@ -327,7 +327,7 @@ export default function AdministratorOverview() {
           </div>
 
         </div>
-      </div>
+      </div> 
     </div>
   );
 }
