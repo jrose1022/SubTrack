@@ -1,4 +1,7 @@
+"use client";
+
 import React from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   LayoutGrid, Home, FileText, Car, BarChart2, 
   ShieldCheck, LogOut, Lock, Calendar, Copy, 
@@ -6,8 +9,9 @@ import {
 } from 'lucide-react';
 
 export default function AdministratorOverview() {
+  const router = useRouter();
+
   // TEMPORARY PLACEHOLDER DATA
-  // Backend team: Replace this object with your Supabase data fetch
   const mockDashboardData = {
     collectedThisMonth: 440.00,
     assessedTotal: 680.00,
@@ -31,17 +35,20 @@ export default function AdministratorOverview() {
     ]
   };
 
-  // Helper calculations for UI percentages
   const collectionPercentage = ((mockDashboardData.collectedThisMonth / mockDashboardData.assessedTotal) * 100).toFixed(1);
   const totalHouseholds = mockDashboardData.registeredCurrent + mockDashboardData.registeredPending;
-  const totalParkingOccupied = mockDashboardData.parkingVacant + mockDashboardData.parkingUnassigned; // Adjust logic based on exact parking rules
+  const totalParkingOccupied = mockDashboardData.parkingVacant + mockDashboardData.parkingUnassigned; 
   const totalParkingSlots = 6; 
+
+  const handleSignOut = () => {
+    router.push('/');
+  };
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] flex font-[Arial]">
       
-      {/* SIDEBAR (30% Color - #2d2d2d) */}
-      <div className="w-64 bg-[#2d2d2d] text-[#f9f9f9] flex flex-col justify-between h-screen sticky top-0">
+      {/* SIDEBAR */}
+      <div className="w-64 bg-[#2d2d2d] text-[#f9f9f9] flex flex-col justify-between h-screen sticky top-0 shrink-0">
         <div>
           <div className="p-6 flex items-center gap-3">
             <div className="w-8 h-8 bg-[#ff8c00] rounded flex items-center justify-center">
@@ -56,26 +63,26 @@ export default function AdministratorOverview() {
           <div className="px-6 py-2 text-sm text-gray-400 mt-2">ADMINISTRATOR PORTAL</div>
           
           <nav className="mt-2 flex flex-col gap-1 px-4">
-            <a href="#" className="flex items-center gap-3 px-4 py-3 bg-[#1e1e1e] rounded-lg border-l-4 border-[#ff8c00] text-[#ff8c00]">
+            <button onClick={() => router.push('/admin/overview')} className="flex items-center gap-3 px-4 py-3 bg-[#1e1e1e] rounded-lg border-l-4 border-[#ff8c00] text-[#ff8c00] cursor-pointer">
               <LayoutGrid size={18} />
               <span className="text-base font-bold">Overview</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#1e1e1e] rounded-lg transition-colors">
+            </button>
+            <button onClick={() => router.push('/admin/households')} className="flex items-center gap-3 px-4 py-3 text-gray-300 border-l-4 border-transparent hover:text-[#ff8c00] rounded-lg transition-colors cursor-pointer w-full">
               <Home size={18} />
               <span className="text-base">Households</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#1e1e1e] rounded-lg transition-colors">
+            </button>
+            <button onClick={() => router.push('/admin/assessments')} className="flex items-center gap-3 px-4 py-3 text-gray-300 border-l-4 border-transparent hover:text-[#ff8c00] rounded-lg transition-colors cursor-pointer w-full">
               <Calendar size={18} />
               <span className="text-base">Assessments</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#1e1e1e] rounded-lg transition-colors">
+            </button>
+            <button onClick={() => router.push('/admin/parking')} className="flex items-center gap-3 px-4 py-3 text-gray-300 border-l-4 border-transparent hover:text-[#ff8c00] rounded-lg transition-colors cursor-pointer w-full">
               <Car size={18} />
               <span className="text-base">Parking inventory</span>
-            </a>
-            <a href="#" className="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-[#1e1e1e] rounded-lg transition-colors">
+            </button>
+            <button onClick={() => router.push('/admin/reports')} className="flex items-center gap-3 px-4 py-3 text-gray-300 border-l-4 border-transparent hover:text-[#ff8c00] rounded-lg transition-colors cursor-pointer w-full">
               <BarChart2 size={18} />
               <span className="text-base">Reports</span>
-            </a>
+            </button>
           </nav>
         </div>
 
@@ -95,13 +102,18 @@ export default function AdministratorOverview() {
               </div>
             </div>
           </div>
-          <button type="button" className="flex items-center gap-2 text-sm text-gray-400 px-2 pt-4 hover:text-white transition-colors">
-            <LogOut size={16} /> Sign out
+          <button 
+            onClick={handleSignOut}
+            type="button" 
+            className="group flex items-center gap-2 text-sm text-gray-400 px-2 pt-4 transition-colors cursor-pointer"
+          >
+            <LogOut size={16} className="group-hover:text-[#ff8c00] transition-colors" /> 
+            <span className="group-hover:text-white transition-colors">Sign out</span>
           </button>
         </div>
       </div>
 
-      {/* MAIN CONTENT (60% Color - #f9f9f9) */}
+      {/* MAIN CONTENT */}
       <div className="flex-1 text-[#2d2d2d] overflow-y-auto">
         
         {/* Topbar */}
@@ -119,7 +131,7 @@ export default function AdministratorOverview() {
           </div>
         </div>
 
-        <div className="p-8 max-w-6xl mx-auto">
+        <div className="p-8 max-w-[1400px] mx-auto">
           {/* Header */}
           <div className="flex justify-between items-end mb-6">
             <div>
@@ -127,7 +139,11 @@ export default function AdministratorOverview() {
               <h1 className="text-2xl font-bold mb-2">Community overview</h1>
               <p className="text-base text-gray-600">October collections and payment-driven parking, reconciled at one snapshot.</p>
             </div>
-            <button type="button" className="flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg text-base font-bold shadow-sm transition-colors cursor-pointer">
+            <button 
+              onClick={() => router.push('/admin/reports')}
+              type="button" 
+              className="flex items-center gap-2 bg-white hover:bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg text-base font-bold shadow-sm transition-colors cursor-pointer"
+            >
               <BarChart2 size={16} /> View board reports
             </button>
           </div>
@@ -140,36 +156,51 @@ export default function AdministratorOverview() {
             <div>PHP · Ledger</div>
           </div>
 
-          {/* 4 Summary Cards */}
+          {/* 4 Summary Cards - Now Interactive */}
           <div className="grid grid-cols-4 gap-4 mb-8">
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            <div 
+              onClick={() => router.push('/admin/reports')}
+              className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:border-[#ff8c00] hover:shadow-md transition-all group"
+            >
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-gray-500">Collected this month</div>
-                <Calendar size={16} className="text-gray-400" />
+                <div className="text-sm text-gray-500 group-hover:text-[#ff8c00] transition-colors">Collected this month</div>
+                <Calendar size={16} className="text-gray-400 group-hover:text-[#ff8c00] transition-colors" />
               </div>
               <div className="text-2xl font-bold mb-2">₱{mockDashboardData.collectedThisMonth.toFixed(2)}</div>
               <div className="text-sm text-gray-500">{collectionPercentage}% of ₱{mockDashboardData.assessedTotal.toFixed(2)} assessed</div>
             </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            
+            <div 
+              onClick={() => router.push('/admin/reports')}
+              className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:border-[#ff8c00] hover:shadow-md transition-all group"
+            >
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-gray-500">Outstanding assessments</div>
-                <Copy size={16} className="text-gray-400" />
+                <div className="text-sm text-gray-500 group-hover:text-[#ff8c00] transition-colors">Outstanding assessments</div>
+                <Copy size={16} className="text-gray-400 group-hover:text-[#ff8c00] transition-colors" />
               </div>
               <div className="text-2xl font-bold mb-2">₱{mockDashboardData.outstandingAssessments.toFixed(2)}</div>
               <div className="text-sm text-gray-500">{mockDashboardData.outstandingHouseholdsCount} households · Due 31 Oct</div>
             </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            
+            <div 
+              onClick={() => router.push('/admin/households')}
+              className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:border-[#ff8c00] hover:shadow-md transition-all group"
+            >
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-gray-500">Registered households</div>
-                <HomeIcon size={16} className="text-gray-400" />
+                <div className="text-sm text-gray-500 group-hover:text-[#ff8c00] transition-colors">Registered households</div>
+                <HomeIcon size={16} className="text-gray-400 group-hover:text-[#ff8c00] transition-colors" />
               </div>
               <div className="text-2xl font-bold mb-2">{totalHouseholds} / {totalHouseholds}</div>
               <div className="text-sm text-gray-500">{mockDashboardData.registeredCurrent} current · {mockDashboardData.registeredPending} payment pending</div>
             </div>
-            <div className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+            
+            <div 
+              onClick={() => router.push('/admin/parking')}
+              className="bg-white p-6 rounded-xl border border-gray-200 shadow-sm cursor-pointer hover:border-[#ff8c00] hover:shadow-md transition-all group"
+            >
               <div className="flex justify-between items-start mb-2">
-                <div className="text-sm text-gray-500">Parking occupied</div>
-                <CarIcon size={16} className="text-gray-400" />
+                <div className="text-sm text-gray-500 group-hover:text-[#ff8c00] transition-colors">Parking occupied</div>
+                <CarIcon size={16} className="text-gray-400 group-hover:text-[#ff8c00] transition-colors" />
               </div>
               <div className="text-2xl font-bold mb-2">{totalParkingOccupied} / {totalParkingSlots}</div>
               <div className="text-sm text-gray-500">{mockDashboardData.parkingVacant} vacant · {mockDashboardData.parkingUnassigned} unassigned</div>
@@ -215,7 +246,13 @@ export default function AdministratorOverview() {
                 <div className="text-base font-bold mb-4">Needs review</div>
                 <div className="flex justify-between items-center mb-4">
                   <div className="text-base font-bold">{mockDashboardData.paymentExceptionsCount} payment exceptions</div>
-                  <button type="button" className="px-4 py-1 text-sm font-bold border border-[#ff8c00] text-[#ff8c00] rounded-full hover:bg-[#fff4e5] transition-colors cursor-pointer">Review</button>
+                  <button 
+                    onClick={() => router.push('/admin/parking')}
+                    type="button" 
+                    className="px-4 py-1 text-sm font-bold border border-[#ff8c00] text-[#ff8c00] rounded-full hover:bg-[#fff4e5] transition-colors cursor-pointer"
+                  >
+                    Review
+                  </button>
                 </div>
                 <p className="text-sm text-gray-600 mb-4">
                   A-103 and B-202 each owe ₱ 120.00 for October. Their allocated parking slots are classified vacant.
@@ -224,7 +261,11 @@ export default function AdministratorOverview() {
                   Not overdue: due 31 Oct 2026. No manual occupancy override is applied.
                 </p>
               </div>
-              <button type="button" className="text-sm font-bold flex items-center mt-4 hover:text-[#ff8c00] transition-colors cursor-pointer">
+              <button 
+                onClick={() => router.push('/admin/parking')}
+                type="button" 
+                className="text-sm font-bold flex items-center mt-4 hover:text-[#ff8c00] transition-colors cursor-pointer w-fit"
+              >
                 Review parking inventory <ChevronRight size={14} className="ml-1" />
               </button>
             </div>
@@ -234,7 +275,11 @@ export default function AdministratorOverview() {
           <div className="bg-white rounded-xl border border-gray-200 shadow-sm mb-6">
             <div className="flex justify-between items-center p-6 border-b border-gray-100">
               <div className="text-base font-bold">Recent simulated collections</div>
-              <button type="button" className="text-sm font-bold flex items-center hover:text-[#ff8c00] transition-colors cursor-pointer">
+              <button 
+                onClick={() => router.push('/admin/reports')}
+                type="button" 
+                className="text-sm font-bold flex items-center hover:text-[#ff8c00] transition-colors cursor-pointer"
+              >
                 View reports <ChevronRight size={14} className="ml-1" />
               </button>
             </div>
