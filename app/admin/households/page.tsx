@@ -22,7 +22,7 @@ export default function HouseholdDirectory() {
     { id: '6', unit: 'B-203', building: 'Pine Court', resident: 'Nina Shah', contact: 'nina.shah@example.com', balance: 0.00, status: 'Current', slot: '—' },
   ];
 
-  for(let i = 7; i <= 45; i++) {
+  for (let i = 7; i <= 45; i++) {
     initialHouseholds.push({
       id: i.toString(),
       unit: `C-${300 + i}`,
@@ -42,7 +42,7 @@ export default function HouseholdDirectory() {
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState<any>(null);
   
-  // NEW: Create Household Modal State
+  // Create Household Modal State
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [createForm, setCreateForm] = useState({
     unit: '',
@@ -50,6 +50,13 @@ export default function HouseholdDirectory() {
     name: '',
     email: ''
   });
+
+  // Require all fields to be filled before enabling Create
+  const isCreateFormComplete =
+    createForm.unit.trim() !== '' &&
+    createForm.building.trim() !== '' &&
+    createForm.name.trim() !== '' &&
+    createForm.email.trim() !== '';
   
   // Pagination State
   const [currentPage, setCurrentPage] = useState(1);
@@ -128,17 +135,36 @@ export default function HouseholdDirectory() {
     router.push('/');
   };
 
-  // NEW: Handle Create Household Confirmation
   const handleConfirmCreate = () => {
-    // Pass the input data via URL parameters to the new blank setup page
-    const query = new URLSearchParams(createForm).toString();
-    router.push(`/admin/households/create?${query}`);
+    if (!isCreateFormComplete) return;
+
+    const newHousehold = {
+      id: Date.now().toString(),
+      unit: createForm.unit.trim(),
+      building: createForm.building.trim(),
+      resident: createForm.name.trim(),
+      contact: createForm.email.trim(),
+      balance: 0.00,
+      status: 'Current',
+      slot: '—'
+    };
+
+    setHouseholds([newHousehold, ...households]);
+    setSelectedId(newHousehold.id);
+    setCreateForm({ unit: '', building: '', name: '', email: '' });
+    setShowCreateModal(false);
+    setCurrentPage(1);
+  };
+
+  const handleCancelCreate = () => {
+    setCreateForm({ unit: '', building: '', name: '', email: '' });
+    setShowCreateModal(false);
   };
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] flex font-[Arial]">
       
-      {/* NEW: CREATE HOUSEHOLD MODAL */}
+      {/* CREATE HOUSEHOLD MODAL */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center">
           <div className="bg-white p-8 rounded-xl shadow-xl max-w-md w-full border border-gray-200">
@@ -151,7 +177,7 @@ export default function HouseholdDirectory() {
                   type="text" 
                   placeholder="e.g. A-101"
                   value={createForm.unit}
-                  onChange={(e) => setCreateForm({...createForm, unit: e.target.value})}
+                  onChange={(e) => setCreateForm({ ...createForm, unit: e.target.value })}
                   className="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#ff8c00]" 
                 />
               </div>
@@ -161,7 +187,7 @@ export default function HouseholdDirectory() {
                   type="text" 
                   placeholder="e.g. Maple Court"
                   value={createForm.building}
-                  onChange={(e) => setCreateForm({...createForm, building: e.target.value})}
+                  onChange={(e) => setCreateForm({ ...createForm, building: e.target.value })}
                   className="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#ff8c00]" 
                 />
               </div>
@@ -171,7 +197,7 @@ export default function HouseholdDirectory() {
                   type="text" 
                   placeholder="e.g. Adrian Lleva"
                   value={createForm.name}
-                  onChange={(e) => setCreateForm({...createForm, name: e.target.value})}
+                  onChange={(e) => setCreateForm({ ...createForm, name: e.target.value })}
                   className="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#ff8c00]" 
                 />
               </div>
@@ -181,7 +207,7 @@ export default function HouseholdDirectory() {
                   type="email" 
                   placeholder="e.g. adrian@example.com"
                   value={createForm.email}
-                  onChange={(e) => setCreateForm({...createForm, email: e.target.value})}
+                  onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
                   className="w-full p-3 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-[#ff8c00]" 
                 />
               </div>
@@ -190,13 +216,13 @@ export default function HouseholdDirectory() {
             <div className="flex gap-4">
               <button 
                 onClick={handleConfirmCreate}
-                disabled={!createForm.unit || !createForm.name}
+                disabled={!isCreateFormComplete}
                 className="flex-1 px-4 py-3 bg-[#ff8c00] text-white rounded-lg text-base font-bold hover:bg-orange-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
               >
                 Create
               </button>
               <button 
-                onClick={() => setShowCreateModal(false)}
+                onClick={handleCancelCreate}
                 className="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-lg text-base font-bold hover:bg-gray-200 transition-colors cursor-pointer"
               >
                 Cancel
@@ -298,7 +324,6 @@ export default function HouseholdDirectory() {
               <h1 className="text-2xl font-bold mb-2">Household directory</h1>
               <p className="text-base text-gray-600">Manage unit records and registered residents. Financial audit history is always retained.</p>
             </div>
-            {/* UPDATED: Button triggers modal instead of navigating */}
             <button 
               onClick={() => setShowCreateModal(true)}
               type="button" 
@@ -499,7 +524,7 @@ export default function HouseholdDirectory() {
                     <input 
                       type="text" 
                       value={editForm.unit}
-                      onChange={(e) => setEditForm({...editForm, unit: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, unit: e.target.value })}
                       className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none focus:border-[#ff8c00] focus:bg-white" 
                     />
                   </div>
@@ -508,7 +533,7 @@ export default function HouseholdDirectory() {
                     <input 
                       type="text" 
                       value={editForm.building}
-                      onChange={(e) => setEditForm({...editForm, building: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, building: e.target.value })}
                       className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none focus:border-[#ff8c00] focus:bg-white" 
                     />
                   </div>
@@ -517,7 +542,7 @@ export default function HouseholdDirectory() {
                     <input 
                       type="text" 
                       value={editForm.resident}
-                      onChange={(e) => setEditForm({...editForm, resident: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, resident: e.target.value })}
                       className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none focus:border-[#ff8c00] focus:bg-white" 
                     />
                   </div>
@@ -526,7 +551,7 @@ export default function HouseholdDirectory() {
                     <input 
                       type="email" 
                       value={editForm.contact}
-                      onChange={(e) => setEditForm({...editForm, contact: e.target.value})}
+                      onChange={(e) => setEditForm({ ...editForm, contact: e.target.value })}
                       className="w-full p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 focus:outline-none focus:border-[#ff8c00] focus:bg-white" 
                     />
                   </div>
