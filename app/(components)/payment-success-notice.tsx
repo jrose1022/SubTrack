@@ -24,7 +24,7 @@ export default function PaymentSuccessNotice({
   const amountValue = Number(amountParam);
   const amount = Number.isFinite(amountValue) && amountValue >= 0 ? amountValue : 120;
   const receipt =
-    receiptParam && /^ST-\d{8}$/.test(receiptParam) ? receiptParam : "ST-DEMO";
+    receiptParam && /^ST-\d{8}$/.test(receiptParam) ? receiptParam : "ST-00000000";
   const method = ["QR payment", "Credit or debit card", "Online banking"].includes(
     methodParam ?? "",
   )
@@ -113,7 +113,7 @@ export default function PaymentSuccessNotice({
         <div className="mt-7 grid gap-2 sm:grid-cols-2">
           <Link
             className="inline-flex items-center justify-center gap-2 rounded-lg bg-amber-500 px-5 py-3 text-xs font-semibold text-neutral-950 transition hover:bg-amber-400"
-            href={`/?view=receipt&${receiptQuery.toString()}`}
+            href={`/receipt?${receiptQuery.toString()}`}
           >
             <Download size={15} />
             View / download receipt

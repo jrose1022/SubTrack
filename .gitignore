@@ -40,8 +40,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Ignore temporary LLM context files
-context.txt
-
-
 /lib/generated/prisma

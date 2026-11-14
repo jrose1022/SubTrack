@@ -181,7 +181,7 @@ export default function PaymentCheckoutCard() {
     });
 
     window.setTimeout(() => {
-      router.push(`/?${query.toString()}`);
+      router.push(`/payment-success?${query.toString()}`);
     }, 700);
   }
 
