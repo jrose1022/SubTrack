@@ -28,6 +28,13 @@ const household = {
 
 const lotName = "Maple Court";
 
+// Full class names are written out so Tailwind can detect them at build time.
+const statusStyles: Record<SlotStatus, string> = {
+  Occupied: "border-orange-300 bg-orange-50 text-orange-700",
+  Vacant: "border-green-300 bg-green-50 text-green-700",
+  Unassigned: "border-stone-300 bg-stone-50 text-stone-600",
+};
+
 const slots: Slot[] = [
   { id: "P-01", status: "Occupied", mine: true },
   { id: "P-02", status: "Occupied" },
@@ -110,7 +117,11 @@ export default function HomeownerParkingPage() {
           <div className="mt-4 flex items-center justify-between">
             <p className="text-3xl font-bold">{mySlot?.id ?? "None"}</p>
             {mySlot && (
-              <span className="rounded-full border border-orange-300 bg-orange-50 px-3 py-0.5 text-xs font-medium text-orange-700">
+              <span
+                className={`rounded-full border px-3 py-0.5 text-xs font-medium ${
+                  statusStyles[mySlot.status]
+                }`}
+              >
                 {mySlot.status}
               </span>
             )}
@@ -149,8 +160,8 @@ export default function HomeownerParkingPage() {
               <div
                 key={slot.id}
                 className={`flex flex-col items-center gap-1 rounded-xl border p-4 text-center ${
-                  slot.mine ? "border-orange-400 bg-orange-50" : "bg-white"
-                }`}
+                  statusStyles[slot.status]
+                } ${slot.mine ? "ring-2 ring-orange-400" : ""}`}
               >
                 <p className="flex items-center gap-2 font-semibold">
                   {slot.status === "Occupied" && <Car size={16} />}
@@ -158,7 +169,7 @@ export default function HomeownerParkingPage() {
                 </p>
                 <p className="text-xs">{slot.status}</p>
                 {slot.mine && (
-                  <p className="text-xs text-gray-600">Your allocation</p>
+                  <p className="text-xs font-medium">Your allocation</p>
                 )}
               </div>
             ))}
@@ -170,13 +181,15 @@ export default function HomeownerParkingPage() {
         {legend.map((item) => (
           <div
             key={item.status}
-            className="rounded-xl border bg-white p-4 shadow-sm"
+            className={`rounded-xl border p-4 shadow-sm ${
+              statusStyles[item.status]
+            }`}
           >
             <p className="text-xs font-semibold">
               {item.status} · {countOf(item.status)}{" "}
               {countOf(item.status) === 1 ? "slot" : "slots"}
             </p>
-            <p className="mt-1 text-xs text-gray-500">{item.description}</p>
+            <p className="mt-1 text-xs text-gray-600">{item.description}</p>
           </div>
         ))}
       </section>
@@ -203,7 +216,15 @@ export default function HomeownerParkingPage() {
                     {row.updated}
                   </td>
                   <td className="px-3 py-3">{row.event}</td>
-                  <td className="px-3 py-3">{row.classification}</td>
+                  <td className="px-3 py-3">
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-xs font-medium ${
+                        statusStyles[row.classification]
+                      }`}
+                    >
+                      {row.classification}
+                    </span>
+                  </td>
                   <td className="whitespace-nowrap px-3 py-3">
                     {row.reference}
                   </td>
